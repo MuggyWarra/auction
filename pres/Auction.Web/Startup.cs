@@ -26,6 +26,7 @@ namespace Auction.Web
         {
             services.AddControllersWithViews();
             services.AddSingleton<ISlotRepos, SlotRepos>();
+            services.AddSingleton<SlotServes>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +54,10 @@ namespace Auction.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "search",
+                    pattern: "search/{query?}",
+                    defaults: new { controller = "Search", action = "Index" });
             });
         }
     }

@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace Auction.Web.Controllers
 {
-    public class SerchController : Controller
+    public class SearchController : Controller
     {
-        private readonly ISlotRepos slotRepos;
-        public SerchController(ISlotRepos slotRepos)
+        private readonly SlotServes slotServes;
+        public SearchController(SlotServes slotServes)
         {
-            this.slotRepos = slotRepos;
+            this.slotServes = slotServes;
         }
         public IActionResult Index(string query)
         {
-            var slots = slotRepos.GetAllByTitle(query);
+            var slots = slotServes.GetAllByQuery(query);
+
             return View(slots);
         }
     }

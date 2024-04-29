@@ -8,6 +8,7 @@ namespace Auction
 {
     public interface ISlotRepos
     {
+        Slot[] GetAllByTeg(string tegs);
         Slot[] GetAllByTitle(string titlePart);
     }
 }

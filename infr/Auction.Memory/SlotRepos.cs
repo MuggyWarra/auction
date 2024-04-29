@@ -7,10 +7,17 @@ namespace Auction.Memory
     {
         private readonly Slot[] slots = new[]
         {
-            new Slot(1,"cro co"),
-            new Slot(2,"croco dil"),
-            new Slot(3,"croco dil dil dil"),
+            new Slot(1,"cro co","#play",15),
+            new Slot(2,"croco dil","#perfume",46),
+            new Slot(3,"croco dil dil dil","#music",3),
         };
+
+        public Slot[] GetAllByTeg(string tegs)
+        {
+            return slots.Where(slot => slot.Tegs == tegs)
+                .ToArray();
+        }
+
         public Slot[] GetAllByTitle(string titlePart)
         {
             return slots.Where(slot => slot.Title.Contains(titlePart))
