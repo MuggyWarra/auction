@@ -10,5 +10,6 @@ namespace Auction
     {
         Slot[] GetAllByTeg(string tegs);
         Slot[] GetAllByTitle(string titlePart);
+        Slot GetById(int id);
     }
 }

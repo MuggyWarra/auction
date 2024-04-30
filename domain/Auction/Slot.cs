@@ -8,10 +8,14 @@ namespace Auction
         public int Id { get; }
         public string Title { get; }
         public string Tegs { get; }
-        public int InitialPrice{get;}
-        public Slot(int id,string title,string tegs,int inpr)
+        public decimal MinBet { get; }
+        public decimal InitialPrice{get;}
+        public string Description { get; }
+        public Slot(int id,string title,string tegs,string descr,decimal inpr,decimal minbet)
         {
             Id = id;
+            Description = descr;
+            MinBet = minbet;
             Tegs = tegs;
             InitialPrice = inpr;
             Title = title;

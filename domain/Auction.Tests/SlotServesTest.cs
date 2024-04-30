@@ -15,9 +15,9 @@ namespace Auction.Tests
         {
             var slotReposStub = new Mock<ISlotRepos>();
             slotReposStub.Setup(x => x.GetAllByTeg(It.IsAny<string>()))
-                .Returns(new[] { new Slot(1, "", "", 0) });
+                .Returns(new[] { new Slot(1, "", "","", 0,0) });
             slotReposStub.Setup(x => x.GetAllByTitle(It.IsAny<string>()))
-                .Returns(new[] { new Slot(2, "", "", 0) });
+                .Returns(new[] { new Slot(2, "", "","", 0,0) });
             var slotServes = new SlotServes(slotReposStub.Object);
             var actual = slotServes.GetAllByQuery("#music");
             Assert.Collection(actual, slot => Assert.Equal(1, slot.Id));
@@ -27,12 +27,13 @@ namespace Auction.Tests
         {
             var slotReposStub = new Mock<ISlotRepos>();
             slotReposStub.Setup(x => x.GetAllByTeg(It.IsAny<string>()))
-                .Returns(new[] { new Slot(1, "", "", 0) });
+                .Returns(new[] { new Slot(1, "", "","", 0,0) });
             slotReposStub.Setup(x => x.GetAllByTitle(It.IsAny<string>()))
-                .Returns(new[] { new Slot(2, "", "", 0) });
+                .Returns(new[] { new Slot(2, "", "","", 0,0) });
             var slotServes = new SlotServes(slotReposStub.Object);
             var actual = slotServes.GetAllByQuery("music");
             Assert.Collection(actual, slot => Assert.Equal(2, slot.Id));
         }
+
     }
 }
