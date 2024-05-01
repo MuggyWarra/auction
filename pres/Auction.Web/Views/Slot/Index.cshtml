@@ -9,4 +9,8 @@
 <p>@Model.Description</p>
 <p>Начальная ставка  <strong>@Model.InitialPrice</strong></p>
 <p>Минимальная ставка  <strong>@Model.MinBet</strong></p>
+<form action="@Url.Action("Add","Cart")" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button class="btn btn-outline-success"type="submit">В корзину</button>
+</form>
 
