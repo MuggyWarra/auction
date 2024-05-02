@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Auction.Memory
 {
     public class OrderRepos : IOrderRepos
@@ -16,12 +12,10 @@ namespace Auction.Memory
             orders.Add(order);
             return order;
         }
-
         public Order GetById(int id)
         {
             return orders.Single(order => order.Id == id);
         }
-
         public void Update(Order order)
         {
             ;

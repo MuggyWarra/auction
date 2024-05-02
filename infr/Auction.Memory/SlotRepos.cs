@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Auction.Memory
@@ -11,6 +12,14 @@ namespace Auction.Memory
             new Slot(2,"croco dil","#perfume","Прекрасный аромат из эксклюзивной колекции",46m,8m),
             new Slot(3,"croco dil dil dil","#music","Альбом детских песен",3m,1m),
         };
+
+        public Slot[] GetAllByIds(IEnumerable<int> slotIds)
+        {
+            var foundSlots = from slot in slots
+                             join slotId in slotIds on slot.Id equals slotId
+                             select slot;
+            return foundSlots.ToArray();
+        }
 
         public Slot[] GetAllByTeg(string tegs)
         {
