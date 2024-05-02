@@ -29,6 +29,7 @@ namespace Auction.Web
             });
 
             services.AddSingleton<ISlotRepos, SlotRepos>();
+            services.AddSingleton<IOrderRepos, OrderRepos>();
             services.AddSingleton<SlotServes>();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,13 +47,9 @@ namespace Auction.Web
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseSession();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
