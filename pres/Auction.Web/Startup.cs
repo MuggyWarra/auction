@@ -20,6 +20,8 @@ namespace Auction.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddTransient<IAuthServise, AuthServise>();
+            services.AddTransient<IAkkRepos, AkkRepos>();
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -27,10 +29,17 @@ namespace Auction.Web
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-
             services.AddSingleton<ISlotRepos, SlotRepos>();
             services.AddSingleton<IOrderRepos, OrderRepos>();
+            services.AddTransient<IAuthServise, AuthServise>();
+            services.AddTransient<IAkkRepos, AkkRepos>();
             services.AddSingleton<SlotServes>();
+            services.AddTransient<IAuthServise, AuthServise>();
+            services.AddControllersWithViews();
+            services.AddSingleton<IAuthServise, AuthServise>();
+            services.AddControllers();
+            services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -46,9 +55,14 @@ namespace Auction.Web
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseSession();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseAuthorization();
             app.UseSession();
             app.UseEndpoints(endpoints =>
             {

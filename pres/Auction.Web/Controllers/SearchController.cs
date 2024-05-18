@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Auction.Web.Controllers
 {
     public class SearchController : Controller
@@ -15,8 +10,12 @@ namespace Auction.Web.Controllers
         }
         public IActionResult Index(string query)
         {
+            if (string.IsNullOrEmpty(query))
+            {
+                var slots1 = slotServes.GetAllByQuery(null);
+                return View(slots1);
+            }
             var slots = slotServes.GetAllByQuery(query);
-
             return View(slots);
         }
     }

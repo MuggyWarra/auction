@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
-
+﻿using System.Text.RegularExpressions;
 namespace Auction
 {
     public class Slot
@@ -20,14 +18,13 @@ namespace Auction
             InitialPrice = inpr;
             Title = title;
         }
-        internal static bool IsTegs(string s)
+        public static bool IsTegs(string s)
         {
             if (s == null) return false;
             s = s.Replace("-", "")
                 .Replace(" ", "")
                 .ToUpper();
             return Regex.IsMatch(s, @"^#");
-
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Auction
 {
     public interface ISlotRepos
     {
+        Slot CreateSlot(int id, string title, string tegs, string description, decimal initialPrice, decimal minBet);
         Slot[] GetAllByTeg(string tegs);
         Slot[] GetAllByTitle(string titlePart);
         Slot GetById(int id);

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text;
-
 namespace Auction.Web
 {
     public static class SessionExpresions
@@ -17,8 +16,7 @@ namespace Auction.Web
             {
                 writer.Write(value.OrderId);
                 writer.Write(value.TotalCount);
-                writer.Write(value.TotalPrice);
-               
+                writer.Write(value.TotalPrice);             
                 session.Set(key, stream.ToArray());
             }
         }

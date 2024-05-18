@@ -1,29 +1,27 @@
-﻿using Auction.Web.Models;
+﻿using Auction.Memory;
+using Auction.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 namespace Auction.Web.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly ISlotRepos slotRepos;
-        private readonly IOrderRepos orderRepos;
-        public OrderController(ISlotRepos slotRepos,IOrderRepos orderRepos)
+        private readonly SlotRepos slotRepos;
+        private readonly OrderRepos orderRepos;
+        public OrderController(SlotRepos slotRepos,OrderRepos orderRepos)
         {
             this.slotRepos = slotRepos;
             this.orderRepos = orderRepos;
         }
         public IActionResult Index()
         {
-            if(HttpContext.Session.TryGetCart(out Cart cart))
+            if (HttpContext.Session.TryGetCart(out var cart))
             {
                 var order = orderRepos.GetById(cart.OrderId);
-                OrderModel model = Map(order);
+                var model = Map(order);
                 return View(model);
             }
-            return View("Empty");
+            return View("Index");
         }
         private OrderModel Map(Order order)
         {
@@ -31,21 +29,17 @@ namespace Auction.Web.Controllers
             var slots = slotRepos.GetAllByIds(slotIds);
             var itemModels = from item in order.Items
                              join slot in slots on item.SlotId equals slot.Id
-                            select new OrderItemModel
-                            {
-                                SlotId = slot.Id,
-                                Title = slot.Title,
-                                Tegs = slot.Tegs,
-                                MinBet = slot.MinBet,
-                                InitialPrice = slot.InitialPrice,
-                            };
+                             select new OrderItemModel(slot);
             return new OrderModel
             {
                 Id = order.Id,
                 Items = itemModels.ToArray(),
-                TotalCount=order.TotalCount,
-                TotalPrice=order.TotalPrice,
             };
+        }
+        public IActionResult CreateSlot(int id)
+        {
+            var slot = slotRepos.CreateSlot(id, "New Slot", "newTegs", "New Description", 10m, 1m);
+            return RedirectToAction("Index", "Slot", new { id });
         }
         public IActionResult AddItem(int id)
         {
@@ -63,8 +57,6 @@ namespace Auction.Web.Controllers
             var slot = slotRepos.GetById(id);
             order.AddItem(slot, 1);
             orderRepos.Update(order);
-            cart.TotalCount = order.TotalCount;
-            cart.TotalPrice = order.TotalPrice;
             HttpContext.Session.Set(cart);
             return RedirectToAction("Index", "Slot", new { id });
         }

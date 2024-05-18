@@ -1,0 +1,40 @@
+﻿<form asp-controller="Auth" asp-action="UpdateUser" method="post">
+    <label for="name">Имя:</label>
+    <input type="text" id="name" name="name"><br>
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" name="password"><br>
+    <input type="submit" value="Обновить информацию">
+</form>
+<form asp-controller="Auth" asp-action="Register" method="post">
+    <label for="name">Имя:</label>
+    <input type="text" id="name" name="name"><br>
+    <label for="login">Логин:</label>
+    <input type="text" id="login" name="login"><br>
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" name="password"><br>
+    <input type="submit" value="Зарегистрироваться">
+</form>
+<form asp-controller="Auth" asp-action="Login" method="post">
+    <label for="login">Логин:</label>
+    <input type="text" id="login" name="login"><br>
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" name="password"><br>
+    <input type="submit" value="Войти">
+</form>
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-controller="Auth" asp-action="Logout" method="post">
+        <input type="submit" value="Выход">
+    </form>
+}
+<h2>Аккаунт</h2>
+<p>Привет, @Model.Name!</p>
+<p>Ваш логин: @Model.Login</p>
+<p>Ваш баланс: @Model.Balance</p>
+<form asp-controller="Auth" asp-action="UpdateUser" method="post">
+    <label for="name">Имя:</label>
+    <input type="text" id="name" name="name"><br>
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" name="password"><br>
+    <input type="submit" value="Обновить информацию">
+</form>
