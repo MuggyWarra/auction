@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace Auction.Web
 {
@@ -13,10 +14,7 @@ namespace Auction.Web
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
@@ -29,8 +27,8 @@ namespace Auction.Web
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            services.AddTransient<ExcelService>();
             services.AddSingleton<ISlotRepos, SlotRepos>();
-            services.AddSingleton<IOrderRepos, OrderRepos>();
             services.AddTransient<IAuthServise, AuthServise>();
             services.AddTransient<IAkkRepos, AkkRepos>();
             services.AddSingleton<SlotServes>();
@@ -41,7 +39,6 @@ namespace Auction.Web
             services.AddMemoryCache();
             services.AddDistributedMemoryCache();
         }
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -51,7 +48,6 @@ namespace Auction.Web
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();

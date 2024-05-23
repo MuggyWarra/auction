@@ -18,12 +18,6 @@ namespace Auction.Memory
         {
             return slots.Where(slot => slot.Title.Contains(titlePart)).ToArray();
         }
-        public Slot CreateSlot(int id, string title, string tegs, string description, decimal initialPrice, decimal minBet)
-        {
-            var slot = new AuctionSlot(id, title, tegs, description, initialPrice, minBet);
-            slots.Add(slot);
-            return slot;
-        }
         public Slot GetById(int id)
         {
             return slots.Single(slot => slot.Id == id);

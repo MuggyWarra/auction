@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Aspose.Cells" Version="24.5.0" />
+    <PackageReference Include="EPPlus" Version="7.1.2" />
+  </ItemGroup>
+
 </Project>

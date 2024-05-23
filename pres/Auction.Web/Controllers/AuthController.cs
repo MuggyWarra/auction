@@ -17,7 +17,7 @@ namespace Auction.Web.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Login([FromBody] LoginModel model)
+        public IActionResult Login(LoginModel model)
         {
             if (string.IsNullOrEmpty(model.Login) || string.IsNullOrEmpty(model.Password))
             {
@@ -33,30 +33,6 @@ namespace Auction.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return BadRequest("Invalid login or password");
-        }
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Register([FromBody] RegisterModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Invalid registration data");
-            }
-            var user = _akkRepos.GetUserByLogin(model.Login);
-            if (user != null)
-            {
-                return BadRequest("Login already exists");
-            }
-            _akkRepos.RegisterUser(model.Name, model.Login, model.Password);
-            if (_authServise.Register(model.Name, model.Login, model.Password))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return BadRequest("Invalid registration data");
         }
         [HttpPost]
         public IActionResult Logout()

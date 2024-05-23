@@ -1,37 +1,27 @@
 ﻿using Auction;
-using System;
 using System.Collections.Generic;
+using System.Linq;
+
 public class AuthServise : IAuthServise
 {
-    private readonly IAkkRepos _akkRepos;
-    public AuthServise(IAkkRepos akkRepos)
-    {
-        _akkRepos = akkRepos;
+    private readonly ExcelService _excelService;
+    public AuthServise(ExcelService excelService)
+    { 
+        _excelService = excelService;
     }
     public List<Akk> GetAllAkks()
     {
-        return _akkRepos.GetAllAkks();
+        return _excelService.GetAkk().ToList();
     }
     public bool Login(string login, string password)
     {
-        var akk = _akkRepos.GetUserByLogin(login);
-        if (akk != null && akk.Password == password)
-        {
-            return true;
-        }
-        return false;
-    }
-    public bool Register(string name, string login, string password)
-    {
-        return RegisterUser(name, login, password);
+        var akks = _excelService.GetAkk();
+        var akk = akks.FirstOrDefault(a => a.Login == login && a.Password == password);
+        return akk != null;
     }
     Akk IAuthServise.GetUserByLogin(string login)
     {
-        var user = _akkRepos.GetUserByLogin(login);
-        if (user == null)
-        {
-            throw new UnauthorizedAccessException("User not found");
-        }
-        return user;
+        var akks = _excelService.GetAkk();
+        return akks.FirstOrDefault(a => a.Login == login);
     }
 }
