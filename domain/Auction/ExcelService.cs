@@ -1,5 +1,7 @@
-﻿using OfficeOpenXml;
+﻿using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
+using System.Collections.Generic;
 using System.IO;
 namespace Auction
 {
@@ -10,48 +12,78 @@ namespace Auction
         {
             _filePath = filePath;
         }
+        public string GetCellValueAsString(ICell cell)
+        {
+            if (cell == null)
+            {
+                return null;
+            }
+            switch (cell.CellType)
+            {
+                case CellType.String:
+                    return cell.StringCellValue;
+                case CellType.Numeric:
+                    return cell.NumericCellValue.ToString();
+                case CellType.Boolean:
+                    return cell.BooleanCellValue.ToString();
+                case CellType.Formula:
+                    return cell.CellFormula;
+                case CellType.Blank:
+                    return string.Empty;
+                default:
+                    return null;
+            }
+        }
         public Akk[] GetAkk()
         {
-            using (var pac = new ExcelPackage(new FileInfo(_filePath)))
+            var akks = new List<Akk>();
+            using (var sream = new FileStream(_filePath,FileMode.Open,FileAccess.Read))
             {
-                var worksheet = pac.Workbook.Worksheets["Akk"];
-                var rowCount = worksheet.Dimension.Rows;
-                var akks = new Akk[rowCount - 1];
-                for (int i = 2; i <= rowCount; i++)
+                var workbook = new XSSFWorkbook(sream);
+                var sheet = workbook.GetSheet("Akk");
+                if (sheet == null) return akks.ToArray();
+                for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)
                 {
+                    var row = sheet.GetRow(rowIndex);
+                    if (row == null) continue;
                     var akk = new Akk(
-                        Convert.ToInt32(worksheet.Cells[i, 1].Value),
-                        worksheet.Cells[i, 2].Value.ToString(),
-                        worksheet.Cells[i, 3].Value.ToString(),
-                        worksheet.Cells[i, 4].Value.ToString(),
-                        Convert.ToDecimal(worksheet.Cells[i, 5].Value)
+                        Convert.ToInt32(row.GetCell(0)?.NumericCellValue),
+                        row.GetCell(1)?.StringCellValue,
+                        row.GetCell(2)?.StringCellValue,
+                        GetCellValueAsString(row.GetCell(3)),
+                    Convert.ToDecimal(row.GetCell(4)?.NumericCellValue)
                     );
-                    akks[i - 2] = akk;
+                    akks.Add(akk);
                 }
-                return akks;
+                return akks.ToArray();
             }
         }
         public Slot[] GetSlots()
         {
-            using (var package = new ExcelPackage(new FileInfo(_filePath)))
+            var slots = new List<Slot>();
+            using (var stream = new FileStream(_filePath, FileMode.Open, FileAccess.Read))
             {
-                var worksheet = package.Workbook.Worksheets["Slot"];
-                var rowCount = worksheet.Dimension.Rows;
-                var slots = new Slot[rowCount - 1];
-                for (int i = 2; i <= rowCount; i++)
+                var workbook = new XSSFWorkbook(stream);
+                var sheet = workbook.GetSheet("Slot");
+                if (sheet == null) return slots.ToArray();
+
+                for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)
                 {
+                    var row = sheet.GetRow(rowIndex);
+                    if (row == null) continue;
+
                     var slot = new Slot(
-                        Convert.ToInt32(worksheet.Cells[i, 1].Value),
-                        worksheet.Cells[i, 4].Value.ToString(),
-                        worksheet.Cells[i, 5].Value.ToString(),
-                        worksheet.Cells[i, 6].Value.ToString(),
-                        Convert.ToDecimal(worksheet.Cells[i, 7].Value),
-                        Convert.ToDecimal(worksheet.Cells[i, 9].Value)
+                        Convert.ToInt32(row.GetCell(0)?.NumericCellValue),
+                        row.GetCell(4)?.StringCellValue,
+                        row.GetCell(5)?.StringCellValue,
+                        row.GetCell(6)?.StringCellValue,
+                        Convert.ToDecimal(row.GetCell(7)?.NumericCellValue),
+                        Convert.ToDecimal(row.GetCell(9)?.NumericCellValue)
                     );
-                    slots[i - 2] = slot;
+                    slots.Add(slot);
                 }
-                return slots;
             }
+            return slots.ToArray();
         }
     }
 }

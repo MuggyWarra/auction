@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.IO;
-
 namespace Auction.Web
 {
     public class Startup
@@ -17,6 +15,7 @@ namespace Auction.Web
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            var filePath = Configuration.GetSection("ExcelFilePath").Value;
             services.AddControllersWithViews();
             services.AddTransient<IAuthServise, AuthServise>();
             services.AddTransient<IAkkRepos, AkkRepos>();
@@ -27,7 +26,7 @@ namespace Auction.Web
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-            services.AddTransient<ExcelService>();
+            services.AddTransient<ExcelService>(_ => new ExcelService(filePath));
             services.AddSingleton<ISlotRepos, SlotRepos>();
             services.AddTransient<IAuthServise, AuthServise>();
             services.AddTransient<IAkkRepos, AkkRepos>();
